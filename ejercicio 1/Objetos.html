@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ejemplos de Objetos</title>
+  <script>
+    // Fecha actual
+    let fecha = new Date();
+    document.write("Fecha actual: " + fecha + "<br>");
+
+    // Raíz cuadrada de 25
+    document.write("Raíz cuadrada de 25: " + Math.sqrt(25) + "<br>");
+
+    // Lista de frutas
+    let frutas = ["Manzana", "Banana", "Mango"];
+    document.write("Frutas: " + frutas.join(", ") + "<br>");
+
+    // Longitud de saludo
+    let saludo = "Hola Mundo";
+    document.write("Longitud del saludo 'Hola Mundo': " + saludo.length + "<br>");
+
+    // Objeto Persona con tus datos
+    function Persona(nombre, edad) {
+      this.nombre = nombre;
+      this.edad = edad;
+    }
+    let persona1 = new Persona("Gregory Cesar", 20);
+    document.write("Persona: " + persona1.nombre + ", Edad: " + persona1.edad);
+  </script>
+</head>
+<body>
+</body>
+</html>
+

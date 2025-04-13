@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Día de nacimiento</title>
+  <script>
+    function calculodia(z) {
+      let fecha = new Date(z);
+      return fecha.getDay(); 
+    }
+
+    function datos(a, b, c, d) {
+      this.x = a;
+      this.y = b;
+      this.z = c;
+      this.dia = calculodia(d);
+    }
+
+    let dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
+    let mio = new datos("Gregory", "Cesar", "Paso de Moca", "August 24, 2002");
+
+    document.write("Me llamo " + mio.x + " " + mio.y + ", soy de " + mio.z + " y nací un día " + dias[mio.dia]);
+  </script>
+</head>
+<body>
+</body>
+</html>
