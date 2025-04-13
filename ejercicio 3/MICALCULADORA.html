@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora Retro XP</title>
+  <style>
+    body {
+      background-color: #ffffcc;
+      font-family: Tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .ventana {
+      width: 240px;
+      margin: 20px auto;
+      border: 2px solid #000080;
+      background-color: #ffffcc;
+      box-shadow: inset 2px 2px 4px #ffffff, inset -2px -2px 4px #999999;
+      padding: 6px;
+    }
+
+    #display {
+      width: 100%;
+      height: 30px;
+      font-size: 16px;
+      font-family: Tahoma, sans-serif;
+      text-align: right;
+      padding: 5px;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+      background-color: white;
+      border: 2px inset #cccccc;
+    }
+
+    .teclado {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    button {
+      height: 32px;
+      font-size: 14px;
+      font-family: Tahoma, sans-serif;
+      font-weight: bold;
+      background-color: #e0e0e0;
+      border: 2px solid #ccc;
+      box-shadow: inset -2px -2px 2px #ffffff, inset 2px 2px 2px #999999;
+      cursor: pointer;
+    }
+
+    button:active {
+      box-shadow: inset 2px 2px 2px #ffffff, inset -2px -2px 2px #999999;
+    }
+
+    .modo-bar {
+      margin-top: 6px;
+      font-size: 11px;
+      padding: 4px 0;
+      background-color: #f3f3e4;
+      border-top: 1px solid #aaa;
+      border-bottom: 2px groove #fff;
+      text-align: center;
+    }
+
+    .modo-bar button {
+      margin: 0 2px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .tab-bar {
+      display: flex;
+      justify-content: space-between;
+      background-color: #f3f3e4;
+      border-top: 2px groove #fff;
+      border-bottom: 2px ridge #ccc;
+      margin-top: 4px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 4px;
+      border: 1px solid #999;
+      background-color: #e0e0e0;
+      font-size: 12px;
+      text-align: center;
+      cursor: pointer;
+      margin-right: 2px;
+    }
+
+    .tab:last-child {
+      margin-right: 0;
+    }
+
+    .tab.active {
+      background-color: white;
+      border-top: 2px solid orange;
+    }
+
+    .contenido {
+      font-size: 12px;
+      padding: 6px;
+      background-color: white;
+      min-height: 40px;
+      border: 1px solid #999;
+      border-top: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="ventana">
+    <input type="text" id="display" value="0" disabled>
+    <div class="teclado">
+      <button onclick="agregar('7')">7</button>
+      <button onclick="agregar('8')">8</button>
+      <button onclick="agregar('9')">9</button>
+      <button onclick="operar('+')">+</button>
+
+      <button onclick="agregar('4')">4</button>
+      <button onclick="agregar('5')">5</button>
+      <button onclick="agregar('6')">6</button>
+      <button onclick="operar('-')">-</button>
+
+      <button onclick="agregar('1')">1</button>
+      <button onclick="agregar('2')">2</button>
+      <button onclick="agregar('3')">3</button>
+      <button onclick="operar('*')">*</button>
+
+      <button onclick="agregar('0')">0</button>
+      <button onclick="borrarTodo()">C</button>
+      <button onclick="borrarUltimo()">CE</button>
+      <button onclick="operar('/')">/</button>
+
+      <button onclick="cambiarSigno()">+/-</button>
+      <button onclick="agregar('.')">.</button>
+      <button onclick="calcular()" style="grid-column: span 2;">=</button>
+    </div>
+
+    <div class="modo-bar">
+      <button onclick="mostrarModo('explorer')">[ Explorer Mode ]</button>
+      <button onclick="mostrarModo('gecko')">[ Gecko Mode ]</button>
+      <button onclick="mostrarModo('view')">[ View Mode ]</button>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab active" onclick="mostrarTab('editor')">Editor</div>
+      <div class="tab" onclick="mostrarTab('preview')">Preview</div>
+      <div class="tab" onclick="mostrarTab('output')">Output</div>
+      <div class="tab" onclick="mostrarTab('split')">Split View</div>
+    </div>
+
+    <div class="contenido" id="contenido">
+      Bienvenido al editor.
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById('display');
+    let operador = '';
+    let operandoAnterior = '';
+    let nuevaOperacion = false;
+
+    function agregar(valor) {
+      if (display.value === '0' || nuevaOperacion) {
+        display.value = valor;
+        nuevaOperacion = false;
+      } else {
+        display.value += valor;
+      }
+    }
+
+    function operar(op) {
+      operandoAnterior = display.value;
+      operador = op;
+      nuevaOperacion = true;
+    }
+
+    function calcular() {
+      let resultado;
+      let actual = parseFloat(display.value);
+      let anterior = parseFloat(operandoAnterior);
+
+      switch (operador) {
+        case '+': resultado = anterior + actual; break;
+        case '-': resultado = anterior - actual; break;
+        case '*': resultado = anterior * actual; break;
+        case '/': resultado = anterior / actual; break;
+        default: return;
+      }
+
+      display.value = resultado;
+      nuevaOperacion = true;
+    }
+
+    function borrarTodo() {
+      display.value = '0';
+      operador = '';
+      operandoAnterior = '';
+    }
+
+    function borrarUltimo() {
+      if (display.value.length > 1) {
+        display.value = display.value.slice(0, -1);
+      } else {
+        display.value = '0';
+      }
+    }
+
+    function cambiarSigno() {
+      if (display.value !== '0') {
+        display.value = parseFloat(display.value) * -1;
+      }
+    }
+
+    function mostrarTab(nombre) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      const tabs = {
+        editor: 'Bienvenido al editor.',
+        preview: 'Vista previa de la calculadora.',
+        output: 'Resultados recientes o salida.',
+        split: 'Vista dividida entre editor y resultado.'
+      };
+      document.querySelector(`.tab-bar .tab:nth-child(${Object.keys(tabs).indexOf(nombre)+1})`).classList.add('active');
+      document.getElementById('contenido').innerText = tabs[nombre];
+    }
+
+    function mostrarModo(modo) {
+      const modos = {
+        explorer: 'Modo Explorer activado: Navegación como en Windows.',
+        gecko: 'Modo Gecko activado: Motor de renderizado alternativo.',
+        view: 'Modo Vista activado: Visualización completa.'
+      };
+      document.getElementById('contenido').innerText = modos[modo];
+    }
+  </script>
+</body>
+</html>
